@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app/style/theme.dart';
 import 'package:quiz_app/view/quiz_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class ResultScreen extends StatefulWidget {
   const ResultScreen({Key? key, required this.resultData}): super(key: key);
@@ -15,6 +17,8 @@ class ResultScreen extends StatefulWidget {
 List resultData = result;
 
 class _ResultScreenState extends State<ResultScreen> {
+
+ // final databaseReference = FirebaseFirestore.instance.collection('resultData').get();
 
   @override
   void initState() {
@@ -51,7 +55,7 @@ class _ResultScreenState extends State<ResultScreen> {
             ),
           ),
         ): Column(
-          children: [
+          children:  [
             Container(
               child: SingleChildScrollView(
                 child: GridView.count(
@@ -64,9 +68,27 @@ class _ResultScreenState extends State<ResultScreen> {
                       );
                     }),
                 ),
+
+
+
               ),
-            )
+            ),
+            ElevatedButton(
+              style: const ButtonStyle(),
+              onPressed: sendResult,
+              child: const SizedBox(
+                height: 50,
+                child: Center(
+                  child: Text(
+                     'Send result',
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontFamily: 'Ubuntu'),
+            ))))
+
           ],
+
         )
 
       ),
@@ -90,6 +112,12 @@ class _ResultScreenState extends State<ResultScreen> {
         ),
       ),
     );
+  }
+
+  Future sendResult()async{
+
+    await  FirebaseFirestore.instance.collection('resultData').doc().set(resultData.first);
+
   }
 
 
